@@ -1,0 +1,19 @@
+CREATE libgeneral.a
+ADDMOD grain.o
+ADDMOD vector3d.o
+ADDMOD plan.o
+ADDMOD dalle.o
+ADDMOD source.o
+ADDMOD obstacle.o
+ADDMOD aleatoire.o
+ADDMOD sphere.o
+ADDMOD brique.o
+ADDMOD grainLJ.o
+ADDMOD cylindre.o
+ADDMOD systeme.o
+ADDMOD dessinable.o
+ADDMOD supportadessin.o
+ADDMOD grainLJsub.o
+ADDMOD pyramide.o
+ADDMOD eau.o
+SAVE

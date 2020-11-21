@@ -1,0 +1,111 @@
+Projet Programmation PH-BA2 2017
+//////////
+Alexandre de Skowronski
+Daniel Montagna
+//////////
+
+Réponses aux questions:
+
+Semaine 2:
+
+Question P1.1: Comment représentez-vous ces vecteurs ?
+               Comment sont-ils organisés : quels attributs ? quelles méthodes ? quels droits d'accès ?
+
+Un vecteur en 3D est représenté par une classe qui contient trois attributs de type "double": ce sont les coordonnées
+cartésiennes (x,y,z). Les méthodes dans cette classe permettent d'effectuer toutes les opérations de bases sur les vecteurs:
+addition, soustraction, multiplication par un scalaire, produit scalaire et produit vectoriel.
+
+Les attributs sont stockés en privé et sont accessibles par des méthodes "get". Toutes les méthodes sont en public pour
+pouvoir directement manipuler les vecteurs.
+
+====================================================
+
+Semaine 4:
+
+Question P4.1: Avez-vous ajouté un constructeur de copie ? Pourquoi (justifiez votre choix) ?
+
+Oui, nous avons opté pour l'écriture d'un constructeur de copie. Ceci nous permet de le personnaliser ultérieurement si cela semble
+nécéssaire, et améliore la lisibilité de notre programme. De plus, il sera plus simple d'initialiser des grains de sable ayant
+les mêmes propriétés (vitesse, forces appliquées, etc...)
+
+Question P4.2: Si l'on souhaitait ajouter un constructeur par coordonnées sphériques (deux angles et une longueur),
+
+    a) que cela impliquerait-il au niveau des attributs de la classe ?
+
+        Il faudrait ajouter trois nouveaux attributs pour les deux angles et longueur, avec des méthodes 	associés pour pouvoir effectuer les opérations sur ces attributs.
+
+    b) quelle serait la difficulté majeure (voire l'impossibilité) de sa réalisation en C++ ?
+
+        Le constructeur par coordonnées sphériques aurait le même prototype que celui pour les coordonnées 	cartésiennes, ce qui le rend ambigu et ne pourra donc plus être utilisé dans cette forme.
+
+====================================================
+
+Semaine 5:
+
+Question P6.1: Comment proposez-vous de représenter les obstacles dans votre projet ? Cela modifie-t-il la classe «Grain» ?
+
+Tous les obstacles héritent d’une superclasse “Obstacle” qui est caractérisée uniquement par ça position. On les définie dans des sous-classes avec leur propriétés spécifiques, par exemple une normale pour le plan, un rayon pour la sphère, etc…
+Chaque obstacle contient aussi sa propre méthode “point_plus_proche()”, qui permet de calculer le point sur l’obstacle qui est le plus proche à un grain donné, ce qui sera utilisé pour définir les interactions.
+Pour la classe Grain il faut ajouter une fonction qui calcule la force appliquée au grain par un obstacle.
+
+====================================================
+
+Semaine 6:
+
+[Question P8.1] En termes de POO, quelle est donc la nature de la méthode dessine ?
+
+La méthode dessine est virtuelle pure.
+
+[Question P8.2] Peut-on faire comme proposé ci-dessus ou faut-il changer quelque chose ? Si oui, pourquoi ; si non, expliquez quoi.
+
+Pour commencer, puisque Grain est devenue Dessinable, il faut mettre à jour son constructeur pour initialiser son SupportADessin. De plus, puisque Grain est maintenant un classe abstraite, il faut s’assurer de bien reprendre le fonctions virtuelles pures, et les définir (“override”). 
+
+[Question P8.2] Quelle est la bonne façon de le faire dans un cadre de programmation orientée-objet ?
+
+Les collections des différents objets dans le système doivent être des tableaux de pointeurs sur ces objets. Ceci permet d’utiliser le polymorphisme puisqu’il s’agit bien de collections hétérogènes pour Grain* et Obstacle*. On peut donc faire appel au fonctions virtuelles qui seront différentes en fonction de l’objet pointé.
+
+[Question P8.3] A quoi faut-il faire attention pour les classes contenant des pointeurs ? Quelles solutions peut-on envisager ?
+
+Il faut s’assurer de bien libérer la mémoire allouée, par exemple en définissant explicitement le destructeur.
+
+[Question P8.4] Comment représentez vous la classe Systeme ? 
+Expliquez votre conception (attributs, interface, ...).
+
+La classe Système contient des tableaux de pointeurs sur les objets qu’elle contient, notamment des Grains, Obstacles et des Sources. Les méthode principale est evolue(double dt), qui permet de faire évoluer le système avec un dt donné. Nous avons aussi défini un opérateur d’affichage qui permet d’afficher en mode texte le contenu du système. Finalement nous avons explicitement défini le destructeur pour libérer la mémoire alloué au pointeurs dans la classe.
+
+
+[Question P8.5] Pourquoi fait-on cela ? A quoi peuvent bien servir ces deux dernières méthodes ?
+
+Notre programme contient un seul système. En mettant le constructeur de copie en “deleted” on évite qu’on fasse une copie du système entier par erreur.
+
+[Question P9.2] Quelle est la complexité de ces deux algorithmes ci-dessus ? 
+
+Avec n le nombre de grains, la complexité est d’ordre O(n^2). On parcoure tous les grains une fois, et pour chaque grains on doit parcourir tous les autres grains du système encore une fois, donc n*n.
+
+====================================================
+
+Semaine 10:
+
+[Question P11.1] A quel endroit vous semble-t-il plus approprié de mettre un tel test ? 
+
+L’endroit le plus approprié est la fonction “évolue()” dans le classe Système. C’est là où sont calculé les interactions en train les grains ce qui permet de vérifier les mouvements juste après qu’ils soient effectués.
+
+====================================================
+
+Semaine 11:
+
+[Question P12.1] Avant de préciser les détails d'implémentation, quelle est la complexité temporelle pire cas de cette solution en fonction du nombre de grains ? [On supposera ici que les grains sont «assez bien répartis» dans les cases. On supposera de plus que la taille d'une case est petite par rapport à la taille du système. Ainsi on peut faire l'hypothèse que le nombre de grains par case est négligeable (O(1)) devant le nombre total de grains (c.-à-d. tous les grains ne se retrouvent pas en même temps dans la même case). 
+Quel(s) inconvénient(s) présente cependant cette solution ? 
+
+Avec n le nombre de grains, la complexité est d’ordre O(n). Puisque la vérification des cases est en O(1), dans le pire des cas on fait 27*n verifications, d’où O(n). L’inconvénient principal est que la division en cases nécessite un tableau dynamique (ou statique) de 3 dimension qui contient assez de cases pour remplir le système, ce qui rend ça taille très importante. Ceci implique aussi qu’à tout moment un grand nombre de cases est vide dans le tableau.
+
+[Question P12.2] Comment et où avez-vous implémenté cette nouvelle façon de calculer les collisions ?
+
+Nous avons créer une nouvelle classe “Case” qui contient un tableau dynamique de pointeurs sur des Grains. Après nous avons divisé le système en cases en ajoutant un nouveau attribut privé à la classe “Système”. Par conséquent nous avons modifier la fonction évolue de sorte que pour chaque grains du système on vérifie les cases adjointes.
+
+[Question P13.1] Quelle est la complexité temporelle pire cas de cette solution en fonction du nombre de grains ? 
+[Cette question est difficile et nécessite la lecture de la documentation sur les map] 
+Quel(s) avantage(s) par rapport à la solution précédente ? 
+Répondez à cette question dans votre fichier REPONSES.
+
+La complexité est d’ordre O(n*log(n)). L’accès à un élément des la map ce fait en O(log(n)) puisqu’elle est ordonnée, ce qui implique qu’en parcourant tous les grains du système on effectue n*log(n) opérations. L’avantage de cette solution est que la map n’a pas de taille définie ce qui implique qu’on mettre à jour les cases sans les explicitement avoir initiées avant. Il n’y a donc pas d’éléments vides qui utilisent de la mémoire. 

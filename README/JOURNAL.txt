@@ -1,0 +1,92 @@
+Projet Programmation PH-BA2 2017
+
+//////////
+
+Alexandre de Skowronski
+
+Daniel Montagna
+
+//////////
+
+
+
+Semaine 2:
+
+
+Mise en place de l'environnement de codage pour le projet: 
+installation de Qt et création du fichier ".pro". 
+
+
+Création de la classe "Vecteur 3D", avec toutes ses méthodes et un constructeur associé.
+
+
+
+
+Semaine 3:
+
+
+Le makefile est généré automatiquement par Qt.
+
+
+
+Semaine 4:
+
+
+Nous avons remplacé les méthodes de la classe Vector3D créées lors de la semaine 2 par des opérateurs surchargés.
+
+
+Création de la classe "Grain", ses attributs et ses méthodes de base.
+
+
+
+
+Semaine 5:
+
+
+Construction des obstacles: 
+une super-classe “Obstacle” qui contient comme seul attribut sa position. 
+On fait hériter tous les autres obstacles de cette super-classe. 
+Grâce au complément mathématique on a pu définir la fonction “point_plus_proche()” pour les obstacles suivants: plan, dalle, sphère, cylindre, brique. 
+Nous avons ajouté le triangle et la pyramide.
+
+
+Nous avons aussi fait la classe "Source".
+Dans la méthode 'création', nous n'imposons pas de graine.
+
+
+Semaine 6:
+Nous avons écrit la classe "Système" en suivant vos instruction.
+Lors de la première simulation en mode texte, nous avions des NaN à foison.
+Cela nous a permis de revoir les calculs implémentés dans les classes "Sources" ou "GrainLJ", 
+et nous avons remarqué quelques erreurs de calculs que nous avons corrigé. Après quelques corrections nous sommes parvenus à avoir les mêmes valeurs que les simulations d'exemple (les deux algorithmes).
+Nous n'avons pas fait le gnuplot.
+
+
+Semaine 7:
+Nous sommes parvenus à implémenter le graphisme après les vacances. Nous avons ensuite commencé à dessiner les grains ainsi que divers obstacles.
+Pour le TextViewer, nous avions auparavant écrit des méthodes d'affichages et des surcharges d'opérateur pour presque toute les classes, donc cala n'a pas été très difficile.
+
+
+
+Semaine 10:
+Le plus gros problème de cette semaine a été l'adaptation du dt. En effet, nous avons essayé quelques méthodes dans les deux algorithmes. Nous avons eu quelques problèmes:
+	Le deuxième ne marchait plus bien donc nous avons essayé dans le premier
+	Dans le premier le changement de dt était difficile a faire, donc nous sommes repassé au deuxième...
+Nous avons donc laissé ce problème en suspend.
+
+Ensuite, les autres instructions n'ont pas été très difficile à réaliser. Nous avons aussi modifié la manière de calcules les forces dans "GrainLJ" (Rien de très important, nous voulions juste rendre le code plus propre).
+
+
+Semaine 11:
+
+
+Nous avons aussi dessiné tout les autres obstacles. Le cylindre, la pyramide, le plan...
+
+P12: Nous avons créé un quadrillage du système. Pour ceci on a créé une nouvelle classe “Case”, qui contient un tableau de pointeurs sur des grains. Pour la dimension de la case on a choisi 2, car c’est la partie entière supérieure de (2*sigma). On a donc ajouté un tableau 3-dimensionnel comme attribut de Systeme, c-a-d: vector<vector<vector<Case>>>. La taille de ce tableau est donnée par la limite du système, i.e. la distance à partir de laquelle on détruit les grains.
+Pour la fonction évolue(), cela entrainait des changements: on itère toujours sur les grains dans le système, mais au lieu de vérifier les interactions avec tous les autres grains du système, on vérifie juste les tableaux des cases adjacentes.
+
+P13: Pour améliorer l’approche donnée par l’exercice P12, on a implanté une “map”. Pour cela, on a créé une structure “Triplet”(trois entiers) avec un opérateur d’ordre (<) qui servira comme “clé”. Le deuxième élément de la map, associé à la clé, est un tableau de grains (le grains présents dans cette case). Ceci simplifie considérablement le déroulement. Pour trouver les grains dans la case, on a qu’à transformer la position du grain en un triplet et parcourir le tableau renvoyé par la map. De cette façon on parcoure les cases adjacentes pour le calcule de force.
+
+BONUS:
+Avant le rendu, nous avons dessiné une fenêtre avec QtDesigner. Ce n'était pas très dure à comprendre, il fallait juste 'se mettre dedans'. 
+Nous avons aussi fait une nouvelle classe "Eau", afin de pouvoir dessiner un niveau d'eau, et de faire quelques simulations avec les deux milieux.
